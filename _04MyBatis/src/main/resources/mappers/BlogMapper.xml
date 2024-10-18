@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tedu._04mybatis.mapper.BlogMapper">
+    <insert id="Insert">
+        INSERT INTO blog(content,created,user_id)
+        VALUES (#{content},#{created},#{userId})
+    </insert>
+    <delete id="deleteById">
+        DELETE FROM blog WHERE id=#{id}
+    </delete>
+    <update id="updateById">
+        UPDATE blog SET content=#{content},created=#{created},user_id=#{userId} WHERE id=#{id}
+    </update>
+    <select id="selectById" resultType="com.tedu._04mybatis.pojo.Blog">
+        SELECT id,content,created,user_id userId
+        FROM blog
+        WHERE id=#{id}
+    </select>
+    <select id="selectAll" resultType="com.tedu._04mybatis.pojo.Blog">
+        SELECT id,content,created,user_id userId
+        FROM blog
+    </select>
+
+    <select id="selectBlogVO1ById" resultType="com.tedu._04mybatis.pojo.BlogVO1">
+        SELECT content,created FROM blog WHERE id=#{id}
+    </select>
+
+    <select id="selectAllBlogVO2" resultType="com.tedu._04mybatis.pojo.BlogVO2">
+        SELECT content,user_id userId FROM blog
+    </select>
+    <update id="dynamicUpdateBlogById">
+        UPDATE blog
+        <set>
+            <if test="content!=null">content=#{content},</if>
+            <if test="created!=null">created=#{created},</if>
+            <if test="userId!=null">user_id=#{userId}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+    <delete id="dynamicDeleteBlogById">
+        deleteSQL(
+            <foreach collection="array" item="e" separator=",">
+                #{e}
+            </foreach>
+            )
+    </delete>
+    <sql id="deleteSQL">
+        DELETE FROM blog
+        WHERE id IN
+    </sql>
+    <delete id="dynamicDeleteBlogById2">
+        <include refid="deleteSQL" />(
+        <foreach collection="list" item="e" separator=",">
+            #{e}
+        </foreach>
+        )
+    </delete>
+    <resultMap id="myMap1" type="com.tedu._04mybatis.pojo.BlogVO3">
+        <id column="id" property="id"/>
+        <result column="=content" property="content"/>
+        <result column="user_id" property="userId"/>
+    </resultMap>
+<select id="selectResultMap" resultMap="myMap1">
+    SELECT id ,content,user_id
+    FROM blog
+    WHERE id=#{id}
+</select>
+    <resultMap id="blogCommentMapper" type="com.tedu._04mybatis.pojo.BlogVO4">
+        <id column="bid" property="id"/>
+        <result column="bcontent" property="content"/>
+        <result column="bcreated" property="created"/>
+        <result column="buserId" property="userId"/>
+        <collection property="comments" ofType="com.tedu._04mybatis.pojo.Comment">
+            <id column="cid" property="id"/>
+            <result column="ccontent" property="content"/>
+            <result column="ccreated" property="created"/>
+            <result column="cuserId" property="userId"/>
+            <result column="blogId" property="blogId"/>
+        </collection>
+    </resultMap>
+    <select id="selectBlogAndCommentById" resultMap="blogCommentMapper">
+        SELECT b.id bid,b.content bcontent,b.created bcreated,b.user_id buserId,
+               c.content ccontent,c.created ccreated,c.id cid,c.user_id cuserId,c.blog_id blogId
+        FROM blog b
+        LEFT JOIN comment c ON b.id=c.blog_id
+        WHERE b.id=#{id}
+    </select>
+    <select id="countBlog" resultType="int">
+        SELECT COUNT(*) FROM blog;
+    </select>
+</mapper>

@@ -5,7 +5,24 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/_04MyBatis/pom.xml" />
+        <option value="$PROJECT_DIR$/egmybatis1/pom.xml" />
+        <option value="$PROJECT_DIR$/QWE/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC/pom.xml" />
+        <option value="$PROJECT_DIR$/newmodule/pom.xml" />
+        <option value="$PROJECT_DIR$/qqqqqqq/pom.xml" />
+        <option value="$PROJECT_DIR$/a/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC2/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC2/05SpringMVC3/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC3/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/05SpringMVC2/05SpringMVC3/pom.xml" />
+        <option value="$PROJECT_DIR$/newmodule/pom.xml" />
+        <option value="$PROJECT_DIR$/qqqqqqq/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
