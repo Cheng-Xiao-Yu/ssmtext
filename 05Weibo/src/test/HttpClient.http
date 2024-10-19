@@ -1,0 +1,11 @@
+POST http://localhost:8080/v1/users/reg
+Content-Type: application/json
+
+{
+  "nickname": "liying",
+  "password": "123456",
+  "username": "zhaoliying"
+}
+
+###
+

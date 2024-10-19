@@ -1,4 +1,4 @@
-package com.tedu.springmvc3;
+package com.tedu.weibo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

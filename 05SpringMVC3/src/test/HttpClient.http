@@ -1,0 +1,24 @@
+GET http://localhost:8080/users/findAll
+Accept: application/json
+
+###
+POST http://localhost:8080/users/update
+Content-Type: application/x-www-form-urlencoded
+
+username=范传奇&password=778899&nickname=大奇
+
+###
+GET http://localhost:8080/users/delete?id=6
+Accept: application/json
+
+###
+POST http://localhost:8080/users/reg
+Content-Type: application/x-www-form-urlencoded
+
+username=范传奇&password=123456&nickname=传奇
+
+###
+GET http://localhost:8080/users/reg?username=范传奇&password=123456&nickname=传奇
+Accept: application/json
+
+###

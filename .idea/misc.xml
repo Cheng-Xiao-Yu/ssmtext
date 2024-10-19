@@ -15,11 +15,15 @@
         <option value="$PROJECT_DIR$/05SpringMVC2/pom.xml" />
         <option value="$PROJECT_DIR$/05SpringMVC2/05SpringMVC3/pom.xml" />
         <option value="$PROJECT_DIR$/05SpringMVC3/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC3/05SpringMVC4/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC4/pom.xml" />
+        <option value="$PROJECT_DIR$/05Weibo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/05SpringMVC2/05SpringMVC3/pom.xml" />
+        <option value="$PROJECT_DIR$/05SpringMVC3/05SpringMVC4/pom.xml" />
         <option value="$PROJECT_DIR$/newmodule/pom.xml" />
         <option value="$PROJECT_DIR$/qqqqqqq/pom.xml" />
       </set>

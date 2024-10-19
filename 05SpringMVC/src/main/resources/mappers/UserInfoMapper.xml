@@ -4,6 +4,45 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tedu._05springmvc.mappers.UserInfoMapper">
     <insert id="insertUserInfo">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         INSERT INTO userinfo(username,password,nickname,age)
         VALUES (#{username},#{password},#{nickname},#{age})
     </insert>
