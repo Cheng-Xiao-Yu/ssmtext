@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <!-- import Element UI CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #app {
+            width: 400px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        .el-input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .el-button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .el-button:hover {
+            background-color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <h1>注册页面</h1>
+    <el-input v-model="user.username" placeholder="用户名"></el-input>
+    <el-input v-model="user.password" type="password" placeholder="密码"></el-input>
+    <el-input v-model="user.nickname" placeholder="昵称"></el-input>
+    <el-button type="primary" @click="reg">注册</el-button>
+</div>
+
+<!-- 引入axios和vue的框架文件 -->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<!-- 引入Vue框架 -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- 引入Element UI框架 -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                user: {
+                    username: '',
+                    password: '',
+                    nickname: ''
+                }
+            };
+        },
+        methods: {
+            reg() {
+                // 发出注册请求
+                axios.post("/v1/users/reg", this.user)
+                    .then(response => {
+                        if (response.data == 1) {
+                            this.$message.success("注册成功");
+                            location.href = "/";
+                        } else {
+                            this.$message.error("用户名已存在");
+                        }
+                    });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

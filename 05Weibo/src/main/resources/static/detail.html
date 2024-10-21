@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微博详情页面</title>
+    <!-- 引入 Element UI CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+        }
+
+        #app {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .el-textarea {
+            width: 100%;
+        }
+
+        .el-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .el-button:hover {
+            background-color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <h1>微博详情页面</h1>
+    <h2>{{ weibo.nickname }}: {{ weibo.content }}</h2>
+    <p>发布于: {{ weibo.created }}</p>
+    <hr>
+
+    <div v-for="c in arr" class="comment-section" :key="c.id">
+        <h4>{{ c.nickname }} 评论道:</h4>
+        <p>{{ c.content }}</p>
+        <span style="float: right; font-size: 12px; color: #888;">发布于：{{ c.created }}</span>
+    </div>
+
+    <el-input
+            type="textarea"
+            v-model="comment.content"
+            placeholder="评论内容..."
+            rows="3"
+            class="el-textarea">
+    </el-input>
+    <el-button type="primary" @click="insert">发表评论</el-button>
+</div>
+
+<!-- 引入axios和vue的框架文件 -->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<!-- 引入 Vue -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- 引入 Element UI -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                weiboId: null, // 当前微博的ID
+                weibo: {}, // 当前微博详情
+                comment: { content: "", weiboId: null }, // 新评论
+                arr: [] // 评论列表
+            };
+        },
+        methods: {
+            // 获取微博详情
+            loadWeibo() {
+                // 从 URL 获取微博 ID
+                const params = new URLSearchParams(location.search);
+                this.weiboId = params.get("id");
+
+                // 发请求获取该微博详情
+                axios.get("/v1/weibo/selectById", { params: { id: this.weiboId } })
+                    .then((response) => {
+                        this.weibo = response.data;
+                    });
+            },
+            // 获取评论列表
+            loadComments() {
+                axios.get("/v1/comment/selectByWeiboId", { params: { weiboId: this.weiboId } })
+                    .then((response) => {
+                        console.log("评论加载成功", response.data); // 添加日志，检查评论数据是否返回
+                        this.arr = response.data;
+                    })
+                    .catch(error => {
+                        console.error("评论加载失败", error);
+                    });
+            },
+            // 提交评论
+            insert() {
+                if (!this.comment.content) {
+                    this.$message.error("评论内容不能为空！");
+                    return;
+                }
+
+                // 确保评论关联到当前微博 ID
+                this.comment.weiboId = this.weiboId;
+
+                axios.post("/v1/comment/insert", this.comment)
+                    .then((response) => {
+                        if (response.data == 1) {
+                            this.$message.success("评论成功");
+                            this.comment.content = ""; // 清空评论框
+                            this.loadComments(); // 重新加载评论列表，显示新评论
+                        } else {
+                            this.$message.error("请先登录！");
+                            location.href = "/login.html";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("发表评论失败", error); // 打印错误日志
+                    });
+            }
+        },
+        created() {
+            // 加载微博详情
+            this.loadWeibo();
+            // 加载评论列表
+            this.loadComments();
+        }
+    });
+</script>
+
+</body>
+</html>

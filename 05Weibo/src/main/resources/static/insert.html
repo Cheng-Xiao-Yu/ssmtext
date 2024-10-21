@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发微博</title>
+    <!-- import Element UI CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #app {
+            width: 80%;
+            max-width: 600px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .el-textarea__inner {
+            background-color: bisque !important;
+        }
+
+        .el-button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .el-button:hover {
+            background-color: #388E3C;
+        }
+
+        .el-textarea {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <h1>发微博</h1>
+    <el-form ref="weiboForm" :model="weibo" label-width="80px">
+        <el-form-item label="内容">
+            <el-input
+                    type="textarea"
+                    v-model="weibo.content"
+                    placeholder="说点儿啥..."
+                    rows="10"
+                    class="el-textarea">
+            </el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="insert">发微博</el-button>
+        </el-form-item>
+    </el-form>
+</div>
+
+<!--引入axios和vue的框架文件-->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<!-- import Vue before Element -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import Element UI JavaScript -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                weibo: {
+                    content: ""
+                }
+            };
+        },
+        methods: {
+            insert() {
+                if (!this.weibo.content) {
+                    this.$message.error("微博内容不能为空！");
+                    return;
+                }
+
+                // 发出发微博的请求
+                axios.post("/v1/weibo/insert", this.weibo)
+                    .then((response) => {
+                        if (response.data == 1) {
+                            this.$message.success("微博发布成功");
+                            location.href = "/";
+                        } else {
+                            this.$message.error("请先登录！");
+                            location.href = "/login.html";
+                        }
+                    });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

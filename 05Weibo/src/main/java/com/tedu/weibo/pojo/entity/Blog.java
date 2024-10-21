@@ -4,10 +4,9 @@ import lombok.Data;
 
 import java.util.Date;
 @Data
-public class User {
+public class Blog {
     private Integer id;
-    private String username;
-    private String nickname;
-    private String password;
+    private String content;
     private Date created;
+    private Integer userId;
 }

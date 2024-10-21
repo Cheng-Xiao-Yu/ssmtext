@@ -3,8 +3,8 @@ package com.tedu.weibo.pojo.vo;
 import lombok.Data;
 
 @Data
-public class UserVO {
+public class BlogIndexVO {
     private Integer id;
+    private String content;
     private String nickname;
-    private String password;
 }

@@ -1,6 +1,188 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>达达微博</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="bookmark" href="/favicon.ico"/>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #388E3C;
+        }
+
+        /* 顶部导航样式 */
+        .navbar {
+            background-color: #4CAF50;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            margin: 0 15px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #388E3C;
+        }
+
+        /* 微博内容区域样式 */
+        .weibo-list {
+            width: 80%;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .weibo-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .weibo-item:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .weibo-item h3 {
+            margin: 0;
+            color: #4CAF50;
+        }
+
+        .weibo-item p {
+            margin: 10px 0 0;
+            color: #555;
+        }
+
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #388E3C;
+        }
+
+        /* 页面底部间距 */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+    </style>
+</head>
 <body>
-<h1>hello word!!!</h1>
-<p>this is a html page</p>
+
+<div id="app">
+    <div class="navbar">
+        <!--判断是否登录，显示不同的内容-->
+        <div v-if="isLogin">
+            <span>欢迎 <span style="color: white">{{user.nickname}}</span> 回来！</span>
+            <a href="/insert.html" class="btn">发微博</a>
+            <a href="javascript:void(0)" @click="logout()" class="btn">退出登录</a>
+        </div>
+        <div v-else>
+            <a href="/reg.html" class="btn">注册</a>
+            <a href="/login.html" class="btn">登录</a>
+        </div>
+    </div>
+
+    <h1>达达微博首页</h1>
+
+    <div class="weibo-list">
+        <!-- 需要有一个数组，数组中存放的是微博对象 -->
+        <div v-for="w in arr" class="weibo-item">
+            <!-- 需要查id、nickname、content -->
+            <h3>
+                <a :href="'/detail.html?id='+w.id">
+                    <span style="color:darkred">{{w.nickname}}</span>: {{w.content}}
+                </a>
+            </h3>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    &copy; 2024 达达微博 | 让每一条微博都有温度
+</footer>
+
+<!-- 引入axios和vue的框架文件 -->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script>
+    let v = new Vue({
+        el: "#app",
+        data:{
+            isLogin: false,
+            user:{},
+            arr:[]
+        },
+        methods:{
+            logout(){
+                axios.get("/v1/users/logout").then(function (response){
+                    v.isLogin=false;
+                }).catch(function () {
+                    console.error("退出登录失败");
+                });
+            }
+        },
+        created:function (){
+            // 进入到页面就要发请求，获取当前登录的用户对象
+            axios.get("/v1/users/currentUser").then(function (response){
+                if (response.status === 200 && response.data) {
+                    v.user = response.data;
+                    v.isLogin = true;
+                } else {
+                    v.isLogin = false;
+                }
+            }).catch(function () {
+                v.isLogin = false;
+            });
+
+            // 发请求获取所有微博数据
+            axios.get("/v1/weibo/selectIndex").then(function (response){
+                v.arr = response.data;
+            }).catch(function () {
+                console.error("微博数据加载失败");
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
