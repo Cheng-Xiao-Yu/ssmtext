@@ -1,0 +1,28 @@
+POST http://localhost:8080/users/update
+Content-Type: application/x-www-form-urlencoded
+
+###
+POST http://localhost:8080/weibo/add
+Content-Type: application/json
+
+{}
+
+###
+GET http://localhost:8080/index.html
+Accept: application/json
+
+###
+GET http://localhost:8080/users/reg
+Accept: application/json
+
+###
+POST http://localhost:8080/users/login
+Content-Type: application/x-www-form-urlencoded
+
+
+###
+POST http://localhost:8080/users/reg
+Content-Type: application/x-www-form-urlencoded
+
+
+###

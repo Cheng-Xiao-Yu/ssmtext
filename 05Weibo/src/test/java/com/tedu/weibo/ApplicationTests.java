@@ -19,10 +19,21 @@ class ApplicationTests {
     }
     @Test
     void testLog(){
-        log.trace("");
-        log.debug("");
+        log.trace("trace输出");
+        log.debug("debug输出");
         log.info("info");
         log.warn("warn");
         log.error("error");
+    }
+    @Test
+    void testCN(){
+        int sum=0;
+
+        for(char c='\u4e00';c<='\ucfa5';c++){
+            System.out.print(c);
+            sum++;
+            if (sum%30==0)
+                System.out.println();
+        }
     }
 }

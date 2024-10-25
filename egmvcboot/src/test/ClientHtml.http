@@ -1,0 +1,20 @@
+POST http://localhost:8080/v1/users/article
+Content-Type: application/json
+
+{"title": "文章1",
+"content": "文章1的内容"}
+
+###
+POST http://localhost:8080/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+GET http://localhost:8080/v1/users/selectByArticleId?id=1
+Accept: application/json
+
+###

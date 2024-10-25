@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tedu.egmvcboot.mapper.UserMapper">
+    <insert id="insert">
+        INSERT INTO user(username,password,nickname,created)
+        VALUES(#{username},#{password},#{nickname},#{created})
+    </insert>
+
+    <select id="findByUsername" resultType="com.tedu.egmvcboot.pojo.entity.User">
+        SELECT id,username,password,nickname,created
+        FROM user
+        WHERE username=#{username}
+    </select>
+    <select id="selectUser" resultType="com.tedu.egmvcboot.pojo.vo.UserVO">
+        SELECT id,password,nickname
+        FROM mvc_user
+        WHERE username=#{username} AND password=#{password}
+    </select>
+    <insert id="insertArticle" >
+        INSERT INTO mvc_article(title,content,user_id)
+        VALUES (#{title},#{content},#{userId})
+    </insert>
+    <select id="selectByArticleId" resultType="com.tedu.egmvcboot.pojo.vo.ArticleVO">
+        SELECT u.nickname,a.title,a.content
+        FROM mvc_user u
+        JOIN mvc_article a ON u.id=a.user_id
+        WHERE a.id=#{id}
+    </select>
+</mapper>

@@ -5,38 +5,52 @@ import com.tedu.weibo.pojo.dto.UserLoginDTO;
 import com.tedu.weibo.pojo.dto.UserRegDTO;
 import com.tedu.weibo.pojo.entity.User;
 import com.tedu.weibo.pojo.vo.UserVO;
+import com.tedu.weibo.result.JsonResult;
+import com.tedu.weibo.result.Status;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+@Slf4j
 @RestController
 @RequestMapping("/v1/users")
+@Api(tags="用户模块")
 public class UserController {
     private Map<String,User> users = new HashMap<>();
     @Autowired
     private UserMapper userMapper;
     @PostMapping("/reg")
-    public int addUser(@RequestBody UserRegDTO userRegDTO){
-
+    @ApiOperation("用户注册")
+    public JsonResult addUser(@RequestBody UserRegDTO userRegDTO){
+        log.trace("UserController:addUser()");
+        log.info("UserController:用户处理功能");
+        log.debug("UserRegDTO:"+userRegDTO);
         User user=new User();
         BeanUtils.copyProperties(userRegDTO,user);
         user.setCreated(new Date());
+        log.debug("User:"+user);
+        if(userMapper.findByUsername(userRegDTO.getUsername())!=null){
+            return new JsonResult(Status.USERNAME_EXISTS);
+        }
         userMapper.insert(user);
         System.out.println(userRegDTO);
 
-        if(userMapper.findByUsername(userRegDTO.getUsername())!=null){
-        return 2;
-        }
+
         //
-        return 1;
+        return JsonResult.success();
     }
     @PostMapping("/login")
-    public int login(@RequestBody UserLoginDTO userLoginDTO, HttpSession session){
+    @ApiOperation("用户登录")
+    public JsonResult login(@RequestBody @Validated UserLoginDTO userLoginDTO, @ApiIgnore HttpSession session){
         /*
             登录:
             1:首先我们根据登录的用户名查询表中对应的记录
@@ -50,29 +64,32 @@ public class UserController {
             if(user.getPassword().equals(userLoginDTO.getPassword())){//一致，密码正确，登录成功
                 //将当前用户信息存入session对象
                 session.setAttribute("user",user);
-                return 1;
+                return JsonResult.success();
             }else{
-                return 2;
+                return new JsonResult(Status.PASSWORD_ERROR);
             }
         }else{
-            return 3;//用户名错误
+            return new JsonResult(Status.USERNAME_ERROR);//用户名错误
         }
     }
     @GetMapping("/currentUser")
-    public UserVO currentUser(HttpSession session){
+    @ApiOperation("查看登录信息")
+    public JsonResult currentUser(@ApiIgnore HttpSession session){
         //问题:该方法无法单独得知此用户是否登录过，要联合login方法
         User user = (User)session.getAttribute("user");
         System.out.println("当前登录用户信息是:"+user);
         if(user==null){
-            return null;
+            return new JsonResult(Status.NOT_LOGIN);
         }
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user,userVO);
-        return userVO;
+        return JsonResult.success(userVO);
     }
 
     @GetMapping("/logout")
-    public void logout(HttpSession session){
+    @ApiOperation("用户登出")
+    public JsonResult logout(@ApiIgnore HttpSession session){
         session.removeAttribute("user");
+        return JsonResult.success();
     }
 }
