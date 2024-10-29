@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -29,6 +30,8 @@ import java.util.List;
 public class BlogController {
     @Autowired
     private BlogMapper blogMapper;
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
     @PostMapping("/insert")
     @ApiOperation("发表微博")
     public JsonResult addBlog(@RequestBody WeiboDTO weiboDTO, @ApiIgnore HttpSession session){
@@ -46,6 +49,7 @@ public class BlogController {
     @GetMapping("/selectIndex")
     @ApiOperation("首页微博列表")
     public JsonResult findIndexBlog(){
+        List<BlogIndexVO>list=blogMapper.findAll();
         return JsonResult.success(blogMapper.findAll());
     }
     @GetMapping("/selectById")

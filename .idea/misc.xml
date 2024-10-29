@@ -22,6 +22,7 @@
         <option value="$PROJECT_DIR$/06Interceptor/pom.xml" />
         <option value="$PROJECT_DIR$/egmvcboot/pom.xml" />
         <option value="$PROJECT_DIR$/07AOP/pom.xml" />
+        <option value="$PROJECT_DIR$/RedisDemo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
